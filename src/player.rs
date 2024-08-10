@@ -4,6 +4,7 @@ pub mod input;
 pub mod movement;
 pub mod camera;
 pub mod visuals;
+pub mod weapons;
 
 pub(super) struct PlayerPlugin;
 impl Plugin for PlayerPlugin {
@@ -22,6 +23,7 @@ impl PluginGroup for PlayerPlugins {
             .add(movement::PlayerMovementPlugin)
             .add(camera::PlayerCameraPlugin)
             .add(visuals::PlayerVisualsPlugin)
+            .add(weapons::PlayerWeaponPlugin)
     }
 }
 

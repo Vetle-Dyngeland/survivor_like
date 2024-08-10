@@ -1,8 +1,10 @@
 use bevy::{app::PluginGroupBuilder, prelude::*};
 
+pub mod ai;
+pub mod enemy;
 pub mod player;
 pub mod stats;
-pub mod enemy;
+pub mod damage;
 
 struct GamePlugins;
 impl PluginGroup for GamePlugins {
@@ -10,6 +12,8 @@ impl PluginGroup for GamePlugins {
         PluginGroupBuilder::start::<Self>()
             .add(player::PlayerPlugin)
             .add(stats::StatsPlugin)
+            .add(ai::AiPlugin)
+            .add(damage::DamagePlugin)
     }
 }
 
@@ -30,6 +34,20 @@ fn main() {
                 .set(ImagePlugin::default_nearest()),
         )
         .add_plugins(GamePlugins)
+        .add_systems(
+            Startup,
+            (
+                enemy::spawn_enemy,
+                enemy::spawn_enemy,
+                enemy::spawn_enemy,
+                enemy::spawn_enemy,
+                enemy::spawn_enemy,
+                enemy::spawn_enemy,
+                enemy::spawn_enemy,
+                enemy::spawn_enemy,
+            )
+                .after(player::PlayerSet::Main),
+        )
         .insert_resource(ClearColor(Color::srgb_u8(25, 25, 25)))
         .run();
 }

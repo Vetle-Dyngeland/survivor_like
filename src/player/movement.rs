@@ -7,7 +7,7 @@ pub(super) struct PlayerMovementPlugin;
 impl Plugin for PlayerMovementPlugin {
     fn build(&self, app: &mut App) {
         app.add_systems(Startup, init.in_set(PlayerSet::Movement))
-            .add_systems(Update, entity_controller.in_set(PlayerSet::Movement));
+            .add_systems(Update, player_controller.in_set(PlayerSet::Movement));
     }
 }
 
@@ -22,13 +22,16 @@ pub struct PlayerController {
     pub custom_speed: Option<f32>,
 }
 
-fn entity_controller(
-    mut query: Query<(&mut Transform, &ActionState<PlayerAction>), With<PlayerController>>,
+fn player_controller(
+    mut query: Query<(
+        &mut Transform,
+        &ActionState<PlayerAction>,
+        &PlayerController,
+    )>,
     stats: Res<GlobalStats>,
     time: Res<Time>,
 ) {
-    const BASE_MULTIPLIER: f32 = 60f32;
-    for (mut transform, input) in query.iter_mut() {
+    for (mut transform, input, controller) in query.iter_mut() {
         transform.translation += Vec3::from((
             match input.clamped_axis_pair(&PlayerAction::Move) {
                 Some(axis_data) => axis_data.xy(),
@@ -37,7 +40,10 @@ fn entity_controller(
             .normalize_or_zero(),
             0f32,
         )) * time.delta_seconds()
-            * stats.player_speed
-            * BASE_MULTIPLIER;
+            * if let Some(speed) = controller.custom_speed {
+                speed
+            } else {
+                stats.player_speed
+            };
     }
 }
