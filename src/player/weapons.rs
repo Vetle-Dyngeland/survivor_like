@@ -2,7 +2,7 @@ use bevy::prelude::*;
 
 pub(super) struct PlayerWeaponPlugin;
 impl Plugin for PlayerWeaponPlugin {
-    fn build(&self, app: &mut App) {
+    fn build(&self, _app: &mut App) {
         
     }
 }

@@ -33,11 +33,7 @@ fn player_controller(
 ) {
     for (mut transform, input, controller) in query.iter_mut() {
         transform.translation += Vec3::from((
-            match input.clamped_axis_pair(&PlayerAction::Move) {
-                Some(axis_data) => axis_data.xy(),
-                None => Vec2::ZERO,
-            }
-            .normalize_or_zero(),
+            input.clamped_axis_pair(&PlayerAction::Move).normalize_or_zero(),
             0f32,
         )) * time.delta_seconds()
             * if let Some(speed) = controller.custom_speed {

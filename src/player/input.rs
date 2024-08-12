@@ -11,13 +11,25 @@ impl Plugin for PlayerInputPlugin {
 }
 
 fn init(mut cmd: Commands, query: Query<Entity, With<Player>>) {
-    let mut input_map = InputMap::default();
-    input_map.insert(PlayerAction::Move, VirtualDPad::wasd());
+    use KeyCode::*;
     cmd.entity(query.single())
-        .insert(InputManagerBundle::with_map(input_map));
+        .insert(InputManagerBundle::with_map(
+            InputMap::default().with_dual_axis(
+                PlayerAction::Move,
+                KeyboardVirtualDPad::new(KeyW, KeyS, KeyA, KeyD),
+            ),
+        ));
 }
 
-#[derive(Actionlike, Clone, Copy, Debug, PartialEq, Eq, Hash, Reflect)]
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, Reflect)]
 pub enum PlayerAction {
     Move,
+}
+
+impl Actionlike for PlayerAction {
+    fn input_control_kind(&self) -> InputControlKind {
+        match self {
+            Self::Move => InputControlKind::DualAxis
+        }
+    }
 }

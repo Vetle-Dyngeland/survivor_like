@@ -4,7 +4,7 @@ pub mod ai;
 pub mod enemy;
 pub mod player;
 pub mod stats;
-pub mod damage;
+pub mod shared_components;
 
 struct GamePlugins;
 impl PluginGroup for GamePlugins {
@@ -13,7 +13,7 @@ impl PluginGroup for GamePlugins {
             .add(player::PlayerPlugin)
             .add(stats::StatsPlugin)
             .add(ai::AiPlugin)
-            .add(damage::DamagePlugin)
+            .add(shared_components::SharedComponentsPlugin)
     }
 }
 
@@ -37,14 +37,14 @@ fn main() {
         .add_systems(
             Startup,
             (
-                enemy::spawn_enemy,
-                enemy::spawn_enemy,
-                enemy::spawn_enemy,
-                enemy::spawn_enemy,
-                enemy::spawn_enemy,
-                enemy::spawn_enemy,
-                enemy::spawn_enemy,
-                enemy::spawn_enemy,
+                enemy::spawn_enemies,
+                enemy::spawn_enemies,
+                enemy::spawn_enemies,
+                enemy::spawn_enemies,
+                enemy::spawn_enemies,
+                enemy::spawn_enemies,
+                enemy::spawn_enemies,
+                enemy::spawn_enemies,
             )
                 .after(player::PlayerSet::Main),
         )

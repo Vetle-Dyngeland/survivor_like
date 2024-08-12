@@ -5,6 +5,7 @@ pub mod movement;
 pub mod camera;
 pub mod visuals;
 pub mod weapons;
+pub mod health;
 
 pub(super) struct PlayerPlugin;
 impl Plugin for PlayerPlugin {
@@ -24,6 +25,7 @@ impl PluginGroup for PlayerPlugins {
             .add(camera::PlayerCameraPlugin)
             .add(visuals::PlayerVisualsPlugin)
             .add(weapons::PlayerWeaponPlugin)
+            .add(health::PlayerHealthPlugin)
     }
 }
 
@@ -42,14 +44,14 @@ impl Plugin for PlayerSetPlugin {
         app.configure_sets(
             Startup,
             (
-                PrePlayer, Main, Input, Movement, Attacks, Camera, Visuals, PostPlayer,
+                PrePlayer, Main, Input, Movement, Damage, Camera, Visuals, PostPlayer,
             )
                 .chain(),
         )
         .configure_sets(
             Update,
             (
-                PrePlayer, Main, Input, Movement, Attacks, Camera, Visuals, PostPlayer,
+                PrePlayer, Main, Input, Movement, Damage, Camera, Visuals, PostPlayer,
             )
                 .chain(),
         );
@@ -63,7 +65,7 @@ pub enum PlayerSet {
     Main,
     Input,
     Movement,
-    Attacks,
+    Damage,
     Camera,
     Visuals,
     PostPlayer,

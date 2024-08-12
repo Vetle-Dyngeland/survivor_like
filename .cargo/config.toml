@@ -2,11 +2,16 @@
 linker = "clang"
 rustflags = ["-C", "link-arg=-fuse-ld=/usr/bin/mold", "-Zshare-generics=y"]
 
-[unstable]
-codegen-backend = true
+[target.x86_64-pc-windows-msvc]
+linker = "rust-lld.exe"
 
-[profile.dev]
-codegen-backend = "cranelift"
+# NOTE: codegen backend doesnt work on windows
 
-[profile.dev.package."*"]
-codegen-backend = "llvm"
+#[unstable]
+#codegen-backend = true
+
+#[profile.dev]
+#codegen-backend = "cranelift"
+
+#[profile.dev.package."*"]
+#codegen-backend = "llvm"
